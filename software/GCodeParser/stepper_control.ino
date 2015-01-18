@@ -24,21 +24,21 @@ void init_steppers()
 	
 	pinMode(X_STEP_PIN, OUTPUT);
 	pinMode(X_DIR_PIN, OUTPUT);
-	pinMode(X_ENABLE_PIN, OUTPUT);
+	//pinMode(X_ENABLE_PIN, OUTPUT);
 	pinMode(X_MIN_PIN, INPUT_PULLUP);
 	pinMode(X_MAX_PIN, INPUT_PULLUP);
 	
 	pinMode(Y_STEP_PIN, OUTPUT);
 	pinMode(Y_DIR_PIN, OUTPUT);
-	pinMode(Y_ENABLE_PIN, OUTPUT);
+	//pinMode(Y_ENABLE_PIN, OUTPUT);
 	pinMode(Y_MIN_PIN, INPUT_PULLUP);
 	pinMode(Y_MAX_PIN, INPUT_PULLUP);
 	
 	pinMode(Z_STEP_PIN, OUTPUT);
-	pinMode(Z_DIR_PIN, OUTPUT);
-	pinMode(Z_ENABLE_PIN, OUTPUT);
-	pinMode(Z_MIN_PIN, INPUT_PULLUP);
-	pinMode(Z_MAX_PIN, INPUT_PULLUP);
+	//pinMode(Z_DIR_PIN, OUTPUT);
+	//pinMode(Z_ENABLE_PIN, OUTPUT);
+	//pinMode(Z_MIN_PIN, INPUT_PULLUP);
+	//pinMode(Z_MAX_PIN, INPUT_PULLUP);
 	
 	//figure our stuff.
 	calculate_deltas();
@@ -71,10 +71,11 @@ void move_to_max(int limiter_pin, int stepper_pin, int stepper_dir_pin,int dir)
 void dda_move(long micro_delay)
 {
 	//enable our steppers
+/*
 	digitalWrite(X_ENABLE_PIN, HIGH);
 	digitalWrite(Y_ENABLE_PIN, HIGH);
 	digitalWrite(Z_ENABLE_PIN, HIGH);
-	
+*/
 	//figure out our deltas
 	max_delta = max(delta_steps.x, delta_steps.y);
 	max_delta = max(delta_steps.z, max_delta);
@@ -314,7 +315,9 @@ long getMaxSpeed()
 void disable_steppers()
 {
 	//enable our steppers
+/*
 	digitalWrite(X_ENABLE_PIN, LOW);
 	digitalWrite(Y_ENABLE_PIN, LOW);
 	digitalWrite(Z_ENABLE_PIN, LOW);
+*/
 }
