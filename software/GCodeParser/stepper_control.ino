@@ -24,21 +24,22 @@ void init_steppers()
 	
 	pinMode(X_STEP_PIN, OUTPUT);
 	pinMode(X_DIR_PIN, OUTPUT);
-	pinMode(X_ENABLE_PIN, OUTPUT);
+	//pinMode(X_ENABLE_PIN, OUTPUT);
 	pinMode(X_MIN_PIN, INPUT_PULLUP);
 	pinMode(X_MAX_PIN, INPUT_PULLUP);
 	
 	pinMode(Y_STEP_PIN, OUTPUT);
 	pinMode(Y_DIR_PIN, OUTPUT);
-	pinMode(Y_ENABLE_PIN, OUTPUT);
+	//pinMode(Y_ENABLE_PIN, OUTPUT);
 	pinMode(Y_MIN_PIN, INPUT_PULLUP);
 	pinMode(Y_MAX_PIN, INPUT_PULLUP);
 	
 	pinMode(Z_STEP_PIN, OUTPUT);
-	pinMode(Z_DIR_PIN, OUTPUT);
-	pinMode(Z_ENABLE_PIN, OUTPUT);
-	pinMode(Z_MIN_PIN, INPUT_PULLUP);
-	pinMode(Z_MAX_PIN, INPUT_PULLUP);
+        servo.write(0);
+	//pinMode(Z_DIR_PIN, OUTPUT);
+	//pinMode(Z_ENABLE_PIN, OUTPUT);
+	//pinMode(Z_MIN_PIN, INPUT_PULLUP);
+	//pinMode(Z_MAX_PIN, INPUT_PULLUP);
 	
 	//figure our stuff.
 	calculate_deltas();
@@ -59,22 +60,23 @@ void move_to_max(int limiter_pin, int stepper_pin, int stepper_dir_pin,int dir)
   */
   while(can_step(limiter_pin, limiter_pin, 0, 1, dir)){
     do_step(stepper_pin, stepper_dir_pin, 0);
-    delay(1);
+    delayMicroseconds(100);
   }
   // slowly back unitl pin is released
   while(!can_step(limiter_pin, limiter_pin, 0, 1, dir)){
     do_step(stepper_pin, stepper_dir_pin, 1);
-    delay(100);
+    delay(1);
   }
 }
 
 void dda_move(long micro_delay)
 {
 	//enable our steppers
+/*
 	digitalWrite(X_ENABLE_PIN, HIGH);
 	digitalWrite(Y_ENABLE_PIN, HIGH);
 	digitalWrite(Z_ENABLE_PIN, HIGH);
-	
+*/
 	//figure out our deltas
 	max_delta = max(delta_steps.x, delta_steps.y);
 	max_delta = max(delta_steps.z, max_delta);
@@ -186,6 +188,10 @@ bool can_step(byte min_pin, byte max_pin, long current, long target, byte direct
 
 void do_step(byte pinA, byte pinB, byte dir)
 {
+  if (pinA == Y_STEP_PIN)
+  {
+    dir = ! dir;
+  }
         switch (dir << 2 | digitalRead(pinA) << 1 | digitalRead(pinB)) {
             case 0: /* 0 00 -> 10 */
             case 5: /* 1 01 -> 11 */
@@ -276,31 +282,23 @@ void calculate_deltas()
 long calculate_feedrate_delay(float feedrate)
 {
 	//how long is our line length?
-	float distance = sqrt(delta_units.x*delta_units.x + delta_units.y*delta_units.y + delta_units.z*delta_units.z);
+	float distance = sqrt(delta_units.x*delta_units.x + delta_units.y*delta_units.y);
 	long master_steps = 0;
-	
 	//find the dominant axis.
-	if (delta_steps.x > delta_steps.y)
-	{
-		if (delta_steps.z > delta_steps.x)
-			master_steps = delta_steps.z;
-		else
-			master_steps = delta_steps.x;
-	}
+	if (delta_steps.y > delta_steps.x)
+		master_steps = delta_steps.y;
 	else
-	{
-		if (delta_steps.z > delta_steps.y)
-			master_steps = delta_steps.z;
-		else
-			master_steps = delta_steps.y;
-	}
-
+		master_steps = delta_steps.x;
+	if (master_steps <= 0){
+            master_steps = 1;
+        }
 	//calculate delay between steps in microseconds.  this is sort of tricky, but not too bad.
 	//the formula has been condensed to save space.  here it is in english:
 	// distance / feedrate * 60000000.0 = move duration in microseconds
 	// move duration / master_steps = time between steps for master axis.
-
-	return ((distance * 60000000.0) / feedrate) / master_steps;	
+        
+	return (((distance * 60000000.0) / feedrate) / master_steps) + 1 ;
+        //return 100;	
 }
 
 long getMaxSpeed()
@@ -314,7 +312,9 @@ long getMaxSpeed()
 void disable_steppers()
 {
 	//enable our steppers
+/*
 	digitalWrite(X_ENABLE_PIN, LOW);
 	digitalWrite(Y_ENABLE_PIN, LOW);
 	digitalWrite(Z_ENABLE_PIN, LOW);
+*/
 }

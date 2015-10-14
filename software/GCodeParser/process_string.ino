@@ -190,6 +190,18 @@ void process_string(char instruction[], int size)
 				length = radius * angle;
 				int steps, s, step;
 				steps = (int) ceil(length / curve_section);
+                                
+                                Serial.print("Radius: ");
+                                Serial.print(radius);
+                                Serial.print(" Angle: ");
+                                Serial.print(angle);
+                                Serial.print(" AngleA: ");
+                                Serial.print(angleA);
+                                Serial.print(" Steps: ");
+                                Serial.print(steps);
+                                Serial.println("");
+
+
 
 				FloatPoint newPoint;
 				for (s = 1; s <= steps; s++) {
@@ -197,6 +209,12 @@ void process_string(char instruction[], int size)
 					newPoint.x = cent.x + radius * cos(angleA + angle * ((float) step / steps));
 					newPoint.y = cent.y + radius * sin(angleA + angle * ((float) step / steps));
 					set_target(newPoint.x, newPoint.y, fp.z);
+
+                                        Serial.print("X: ");
+                                        Serial.print(newPoint.x);
+                                        Serial.print(" Y: ");
+                                        Serial.println(newPoint.y);
+                                
 
 					// Need to calculate rate for each section of curve
 					if (feedrate > 0)
@@ -238,7 +256,7 @@ void process_string(char instruction[], int size)
 			//go home.
 			case 28:
 				set_target(0.0, 0.0, 0.0);
-				goto_machine_zero();
+                                goto_machine_zero();
 			break;
 
 			//go home via an intermediate point.
@@ -267,7 +285,7 @@ void process_string(char instruction[], int size)
 
 				//go home.
 				set_target(0.0, 0.0, 0.0);
-				goto_machine_zero();
+                                goto_machine_zero();  
 			break;
 
 			//Absolute Positioning

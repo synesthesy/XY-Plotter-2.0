@@ -1,11 +1,12 @@
 #include <Servo.h>
 // define the parameters of our machine.
 float X_STEPS_PER_INCH = 48;
-float X_STEPS_PER_MM = 40;
+float X_STEPS_PER_MM = 80;
+
 int X_MOTOR_STEPS   = 100;
 
 float Y_STEPS_PER_INCH = 48;
-float Y_STEPS_PER_MM  = 40;
+float Y_STEPS_PER_MM  = 80;
 int Y_MOTOR_STEPS   = 100;
 
 float Z_STEPS_PER_INCH = 48;
@@ -33,21 +34,21 @@ int SENSORS_INVERTING = 1;
 * this uses the undocumented feature of Arduino - pins 14-19 correspond to analog 0-5
 ****************************************************************************************/
 
-int X_STEP_PIN = 8;
-int X_DIR_PIN = 11;
-int X_ENABLE_PIN = 4;
-int X_MIN_PIN = A4;
-int X_MAX_PIN = A5;
+int X_STEP_PIN = 9;
+int X_DIR_PIN = 3;
+//int X_ENABLE_PIN = 4;
+int X_MIN_PIN = 12;
+int X_MAX_PIN = 13;
 
-int Y_STEP_PIN = 12;
-int Y_DIR_PIN = 13;
-int Y_ENABLE_PIN = 4;
-int Y_MIN_PIN = A1;
-int Y_MAX_PIN = A0;
+int Y_STEP_PIN = 10;
+int Y_DIR_PIN = 11;
+//int Y_ENABLE_PIN = 4;
+int Y_MIN_PIN = A3;
+int Y_MAX_PIN = A2;
 
-int Z_STEP_PIN = A3;
+int Z_STEP_PIN = A0;
 int Z_DIR_PIN = 9;
-int Z_ENABLE_PIN = 4;
+//int Z_ENABLE_PIN = 4;
 int Z_MIN_PIN = A1;
 int Z_MAX_PIN = A0;
 int Z_ENABLE_SERVO = 1;
